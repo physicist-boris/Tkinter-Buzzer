@@ -2,13 +2,24 @@ from tkinter import tix
 from tkinter import *
 
 
+"""commentaires cinq premières lignes de codes
+fenetre: creation d'une interface principale où se déroulent tous les évènements(actions)
 
-fenetre = tix.Tk()   #creation d'une interface principale où se déroule tous les évènements(actions)
-fenetre.geometry("400x400")#taille de la fenêtre
-liste_buzz = {}#dictionnaire qui à chaque clé(0, 1, 2,...) associe une équipe choisis par l'utilisateur. Exemple: {0: "Togo", 1: "Sénégal"}
-liste_equipe = []#liste qui contient toutes les différentes équipes qui ont été entrées au début de jeu
-equipe_Select_var = []#disons que c'est une liste qui contient tous les différentes variable des "Combobox" parce que à chaque combobox est associé une variable
-                        #qui correspondant à la variable sélectionnée dans une liste de choix
+liste_buzz: dictionnaire qui à chaque clé(0, 1, 2,...) associe une équipe choisis par l'utilisateur.
+             Exemple: {0: "Togo", 1: "Sénégal}
+
+liste_equipe: liste qui contient toutes les différentes équipes qui ont été entrées au début de jeu
+
+
+equipe_Select_var: disons que c'est une liste qui contient tous les différentes variable des "Combobox" parce que
+à chaque combobox est associé une variable qui correspondant à la variable sélectionnée dans une liste de choix
+"""
+
+fenetre = tix.Tk()
+fenetre.geometry("400x400")
+liste_buzz = {}
+liste_equipe = []
+equipe_Select_var = []
 
 Label(fenetre, text="CRÉER EQUIPE").pack()
 
@@ -32,24 +43,28 @@ def Modifier_equipe():
 
 
 
-#Fonction(ou commande) qui permet d'ajouter des équipes à la liste des équipes(liste_equipe) avec le bouton "Ajouter équipe"
+#Fonction qui permet d'ajouter des équipes à la liste des équipes(liste_equipe) avec le bouton "Ajouter équipe"
 def add_equipe():
-    if len(list(entree.get())) >= 1:
-        if (entree.get().lower() in liste_equipe) is not True:
-            print(entree.get())
-            liste_equipe.append(entree.get().lower())
+    equipe = entree.get().strip()
+    print(equipe)
+    if len(list(equipe)) >= 1:
+        if (equipe.lower() in liste_equipe) is not True:
+            liste_equipe.append(equipe.lower())
             entree.delete(0, END)
 
 
-#Fonction(ou commande) qui permet d'ajouter des équipes à la liste des équipes(liste_equipe) avec la touche entrée
+#Fonction qui permet d'ajouter des équipes à la liste des équipes(liste_equipe) avec la touche "entrée"
 def addition_team(event):
-    if len(list(entree.get())) >= 1:
-        if (entree.get().lower() in liste_equipe) is not True:
-            liste_equipe.append(entree.get().lower())
+    equipe = entree.get().strip()
+    print(equipe)
+    if len(list(equipe)) >= 1:
+        if (equipe.lower() in liste_equipe) is not True:
+            liste_equipe.append(equipe.lower())
             entree.delete(0, END)
 
 
-#Fonction(ou commande) qui pour chaque clés du dictionnaire liste_buzz(0, 1,2...) associe une valeur sous forme de chaîne de caractère correspondant à une équipe
+#Fonction qui pour chaque clés du dictionnaire liste_buzz(0, 1,2...) associe une valeur
+#sous forme de chaîne de caractère correspondant à une équipe
 def Association_de_buzz(evt):
     tuy = 0
     for i in equipe_Select_var:
