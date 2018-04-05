@@ -94,36 +94,39 @@ def window_buzz_association():
     deuxième fenetre où se déroule l'association des équipes à un buzzer
     :return:
     """
-    for c in main_window.winfo_children():
-        c.destroy()
-    label_frame = LabelFrame(main_window, padx=35, pady=15)
-    label_frame.pack(fill="both", expand="yes")
+    if len(liste_equipe) >= 2:
+        for c in main_window.winfo_children():
+            c.destroy()
+        label_frame = LabelFrame(main_window, padx=35, pady=15)
+        label_frame.pack(fill="both", expand="yes")
 
-    Label(label_frame, text="LIER ÉQUIPE").pack()
-    Label(main_window, text ="Buzzers").pack()
-    a = 90
+        Label(label_frame, text="LIER ÉQUIPE").pack()
+        Label(main_window, text ="Buzzers").pack()
+        a = 90
 
-    for n in range(0, (len(liste_equipe))):
-        nom_buzz = "Buzz0{}".format(str(n))
-        Label(main_window, text= nom_buzz).place(x = 45, y= a)
-        equipe_select_var.append((tix.StringVar()))
-        selection_equipe = tix.ComboBox(variable=equipe_select_var[n], editable= True, dropdown=1, command = buzz_association)
-        selection_equipe.entry.config(state='readonly', bg = "red")
+        for n in range(0, (len(liste_equipe))):
+            nom_buzz = "Buzz0{}".format(str(n))
+            Label(main_window, text= nom_buzz).place(x = 45, y= a)
+            equipe_select_var.append((tix.StringVar()))
+            selection_equipe = tix.ComboBox(variable=equipe_select_var[n], editable= True, dropdown=1, command = buzz_association)
+            selection_equipe.entry.config(state='readonly', bg = "red")
 
-        i = 0
-        for j in liste_equipe:
-            selection_equipe.insert(i, j)
-            i+= 1
+            i = 0
+            for j in liste_equipe:
+                selection_equipe.insert(i, j)
+                i+= 1
 
-        selection_equipe.pack()
-        selection_equipe.place(x= 100, y= a)
-        a += 55
-    btn_liste_equipe = Button(main_window, text="Lister équipe", command=affiche_equipe)
-    btn_liste_equipe.pack()
-    btn_modify_team = Button(main_window, text="Modifier équipe", command=modifier_equipe)
-    btn_modify_team.pack()
-    btn_continuer= Button(main_window, text="Continuer", command=window_declare_winner)
-    btn_continuer.pack()
+            selection_equipe.pack()
+            selection_equipe.place(x= 100, y= a)
+            a += 55
+        btn_liste_equipe = Button(main_window, text="Lister équipe", command=affiche_equipe)
+        btn_liste_equipe.pack()
+        btn_modify_team = Button(main_window, text="Modifier équipe", command=modifier_equipe)
+        btn_modify_team.pack()
+        btn_continuer= Button(main_window, text="Continuer", command=window_declare_winner)
+        btn_continuer.pack()
+    else:
+        pass
 
 
 
