@@ -84,6 +84,28 @@ class Window_General_Function(tk.Tk):
             label.pack()
         list_team_showing.mainloop()
 
+
+
+    def add_key(self):
+        self.dict_key = {}
+        self.n = 0
+        self.add_key = Toplevel(self.Obj_Window_General_Function)
+        self.add_key.geometry("500x100")
+        label = tk.Label(self.add_key, text = "Appuie sur des touches du clavier pour choisir lesquelles seront liées au buzzer")
+        label.pack()
+        self.add_key.focus_set()
+        self.add_key.bind("<KeyPress>", self.on_key_add)
+        self.add_key.protocol("WM_DELETE_WINDOW", self.on_closing_add_key)
+    def on_key_add(self, event):
+        self.dict_key[self.n] = event.char
+        self.n += 1
+
+    def on_closing_add_key(self):
+        self.add_key.unbind("<KeyPress>")
+        self.add_key.destroy()
+
+
+
     def erase_team(self):
         """
         Fonction qui crée une nouvelle fenêtre dans laquelle on peut effacer des équipes. bouton("Effacer une équipe")
@@ -115,6 +137,8 @@ class Window_General_Function(tk.Tk):
         self.list_team_to_erase.destroy()
 
 
+
+
 class Menu_Create_Team(tk.Frame, Window_General_Function):
     """
     Classe associée à la fenêtre (frame) où l'on crée les équipes
@@ -125,6 +149,7 @@ class Menu_Create_Team(tk.Frame, Window_General_Function):
         self.Obj_Window_General_Function = controller
         self.container = controller.container
         self.list_team = controller.list_team
+        self.dict_key = {}
         self.list_frame = controller.list_frame
         self.color_font_entry = controller.color_font_entry
         tk.Label(self, text="CRÉER EQUIPE").pack()
@@ -142,6 +167,9 @@ class Menu_Create_Team(tk.Frame, Window_General_Function):
         btn_ajouter_equipe = Button(self, text="Effacer une équipe", command=self.erase_team)
         btn_ajouter_equipe.pack()
 
+        btn_ajouter_touche = Button(self, text="Ajouter des touches", command=self.add_key)
+        btn_ajouter_touche.pack()
+
 
 class Window_Association_Buzzer(tk.Frame):
     """
@@ -156,7 +184,7 @@ class Window_Association_Buzzer(tk.Frame):
         tk.Label(self, text="Buzzers:").place(x=70, y=70)
         longueur_y = 115
         self.list_variable_team = {}
-        for n in range(1, (len(controller.list_team) + 1)):
+        for n in range(0, (len(controller.list_team))):
             nom_buzz = "Buzz0{}".format(str(n))
             tk.Label(self, text=nom_buzz).place(x=45, y=longueur_y)
             variable_team = StringVar(self)
@@ -203,17 +231,16 @@ class Window_Detect_Winner(tk.Frame):
         :param event:
         :return:
         """
-        try:
-            if int(event.char) in self.Obj_Window_Association_Buzzer.list_variable_team.keys():
-                self.winner = self.Obj_Window_Association_Buzzer.list_variable_team[int(event.char)].get()
+        for key, value in self.Obj_Menu_Create_Team.dict_key.items():
+            if value == event.char:
+                self.winner = self.Obj_Window_Association_Buzzer.list_variable_team[key].get()
                 self.Obj_Menu_Create_Team.switch_frame(self.Obj_Menu_Create_Team.container, "Window_Show_Winner",
                                                        controller=self)
 
 
             else:
                 pass
-        except:
-            pass
+
 
 class Window_Show_Winner(tk.Frame):
     """
