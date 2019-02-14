@@ -57,10 +57,25 @@ class Window_General_Function(tk.Tk):
                         frame_to_call = frame(container, controller)
                         frame_to_call.grid(row=0, column=0, sticky="nsew")
                         frame_to_call.tkraise()
+                elif window_name == "Window_Association_Buzzer":
+                    if len(self.dict_key) != len(self.list_team):
+                        pop_up_inegal_team_key = Toplevel(self)
+                        tk.Label(pop_up_inegal_team_key, text = "le nombre d'équipes choisies n'est pas égal au nombre de touches choisies").pack()
+                    elif len(self.list_team) <= 1:
+                        pop_up_team_number = Toplevel(self)
+                        tk.Label(pop_up_team_number,
+                                 text="le nombre d'équipes choisies est insuffisant").pack()
+                    else:
+                        frame_to_call = frame(container, controller)
+                        frame_to_call.grid(row=0, column=0, sticky="nsew")
+                        frame_to_call.tkraise()
+
                 else:
                     frame_to_call = frame(container, controller)
                     frame_to_call.grid(row=0, column=0, sticky="nsew")
                     frame_to_call.tkraise()
+
+
 
     def add_equipe(self):
         """
@@ -90,9 +105,9 @@ class Window_General_Function(tk.Tk):
         self.dict_key = {}
         self.n = 0
         self.add_key = Toplevel(self.Obj_Window_General_Function)
-        self.add_key.geometry("500x100")
-        label = tk.Label(self.add_key, text = "Appuie sur des touches du clavier pour choisir lesquelles seront liées au buzzer")
-        label.pack()
+        self.add_key.geometry("700x100")
+        tk.Label(self.add_key, text = "Appuie sur toutes les touches du clavier dont tu as besoin pour choisir lesquelles seront liées au buzzer.").pack()
+        tk.Label(self.add_key, text = "(Au moment où tu as ouvert cette fenêtre, il y a actuellement 0 touches choisies dans la mémoire )").pack()
         self.add_key.focus_set()
         self.add_key.bind("<KeyPress>", self.on_key_add)
         self.add_key.protocol("WM_DELETE_WINDOW", self.on_closing_add_key)
@@ -181,6 +196,8 @@ class Window_Association_Buzzer(tk.Frame):
         self.Obj_Menu_Create_Team = controller
         self.container = controller.container
         tk.Label(self, text="ASSOCIER UNE ÉQUIPE À UN BUZZER").pack()
+        tk.Label(self, text="(L'ordre dans lequel les buzzers sont(0,1,2...),correspondra à l'ordre dans lequel vous avez appuyé les touches.)").pack()
+
         tk.Label(self, text="Buzzers:").place(x=70, y=70)
         longueur_y = 115
         self.list_variable_team = {}
