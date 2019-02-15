@@ -8,6 +8,7 @@ from tkinter import OptionMenu
 from tkinter import Checkbutton
 from tkinter import BooleanVar
 from tkinter import Toplevel
+from winsound import Beep
 
 
 class Window_General_Function(tk.Tk):
@@ -107,13 +108,19 @@ class Window_General_Function(tk.Tk):
         self.add_key = Toplevel(self.Obj_Window_General_Function)
         self.add_key.geometry("700x100")
         tk.Label(self.add_key, text = "Appuie sur toutes les touches du clavier dont tu as besoin pour choisir lesquelles seront liées au buzzer.").pack()
-        tk.Label(self.add_key, text = "(Au moment où tu as ouvert cette fenêtre, il y a actuellement 0 touches choisies dans la mémoire )").pack()
+        self.text = StringVar()
+        self.label_count = tk.Label(self.add_key, textvariable = self.text).pack()
+        self.text.set("Vous avez actuellement ajouté 0 touches")
         self.add_key.focus_set()
         self.add_key.bind("<KeyPress>", self.on_key_add)
         self.add_key.protocol("WM_DELETE_WINDOW", self.on_closing_add_key)
     def on_key_add(self, event):
-        self.dict_key[self.n] = event.char
-        self.n += 1
+        if event.keycode in self.dict_key.values():
+            pass
+        else:
+            self.dict_key[self.n] = event.keycode
+            self.n += 1
+            self.text.set("Vous avez actuellement ajouté {} touches".format(self.n))
 
     def on_closing_add_key(self):
         self.add_key.unbind("<KeyPress>")
@@ -205,7 +212,7 @@ class Window_Association_Buzzer(tk.Frame):
             nom_buzz = "Buzz0{}".format(str(n))
             tk.Label(self, text=nom_buzz).place(x=45, y=longueur_y)
             variable_team = StringVar(self)
-            variable_team.set(controller.list_team[0])  # default value
+            variable_team.set(controller.list_team[n])  # default value
             self.list_variable_team[n] = variable_team
 
             drop_down_menu_team = OptionMenu(self, variable_team, *controller.list_team)
@@ -249,12 +256,13 @@ class Window_Detect_Winner(tk.Frame):
         :return:
         """
         for key, value in self.Obj_Menu_Create_Team.dict_key.items():
-            if value == event.char:
+            print(self.Obj_Menu_Create_Team.dict_key)
+            if value == event.keycode:
                 self.winner = self.Obj_Window_Association_Buzzer.list_variable_team[key].get()
                 self.Obj_Menu_Create_Team.switch_frame(self.Obj_Menu_Create_Team.container, "Window_Show_Winner",
                                                        controller=self)
 
-
+                Beep(1800, 850)
             else:
                 pass
 
@@ -279,8 +287,9 @@ class Window_Show_Winner(tk.Frame):
         btn_liste_equipe = Button(self, text="arrêter le jeu et revenir au menu principal",
                                   command=lambda: self.Obj_Menu_Create_Team.switch_frame(self.Obj_Menu_Create_Team
                                                                                          .container, "Menu_Create_Team",
-                                                                                         controller=self.Obj_Menu_Create_Team))
+                                                                            controller=self.Obj_Menu_Create_Team))
         btn_liste_equipe.pack()
+
 
 
 if __name__ == "__main__":
