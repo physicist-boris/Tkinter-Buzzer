@@ -23,6 +23,7 @@ class Window_General_Function(tk.Tk):
         tk.Tk.__init__(self)
         self.list_team = []
         self.list_frame = []
+        self.dict_key = {}
         self.container = tk.Frame(self)
         self.container.pack(side="top", fill="both", expand=True)
         self.container.grid_rowconfigure(0, weight=1)
@@ -106,6 +107,8 @@ class Window_General_Function(tk.Tk):
         self.dict_key = {}
         self.n = 0
         self.add_key = Toplevel(self.Obj_Window_General_Function)
+        self.add_key.focus_set()
+        self.add_key.grab_set()
         self.add_key.geometry("700x100")
         tk.Label(self.add_key, text = "Appuie sur toutes les touches du clavier dont tu as besoin pour choisir lesquelles seront liées au buzzer.").pack()
         self.text = StringVar()
@@ -134,6 +137,8 @@ class Window_General_Function(tk.Tk):
         :return:
         """
         self.list_team_to_erase = Toplevel(self.Obj_Window_General_Function)
+        self.list_team_to_erase.focus_set()
+        self.list_team_to_erase.grab_set()
         label = tk.Label(self.list_team_to_erase, text="Sélectionner une équipe à effacer et fermer la fenêtre")
         label.pack()
         self.dict_check_button_team = {}
@@ -170,8 +175,8 @@ class Menu_Create_Team(tk.Frame, Window_General_Function):
         tk.Frame.__init__(self, parent)
         self.Obj_Window_General_Function = controller
         self.container = controller.container
+        self.dict_key = controller.dict_key
         self.list_team = controller.list_team
-        self.dict_key = {}
         self.list_frame = controller.list_frame
         self.color_font_entry = controller.color_font_entry
         tk.Label(self, text="CRÉER EQUIPE").pack()
@@ -243,9 +248,10 @@ class Window_Detect_Winner(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.config(bg = "black")
         self.Obj_Menu_Create_Team = controller.Obj_Menu_Create_Team
         self.Obj_Window_Association_Buzzer = controller
-        tk.Label(self, text="EN ATTENTE DU BUZZ.....").pack()
+        tk.Label(self, text="EN ATTENTE DU BUZZ.....", font=("Helvetica", 37,"bold"),bg = "black", fg = "white").place(x =0, y = 250)
         self.focus_set()
         self.bind("<KeyPress>", self.on_key_press)
 
@@ -256,7 +262,6 @@ class Window_Detect_Winner(tk.Frame):
         :return:
         """
         for key, value in self.Obj_Menu_Create_Team.dict_key.items():
-            print(self.Obj_Menu_Create_Team.dict_key)
             if value == event.keycode:
                 self.winner = self.Obj_Window_Association_Buzzer.list_variable_team[key].get()
                 self.Obj_Menu_Create_Team.switch_frame(self.Obj_Menu_Create_Team.container, "Window_Show_Winner",
@@ -275,20 +280,21 @@ class Window_Show_Winner(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         controller.unbind("<KeyPress>")
+        self.config(bg = "black")
         self.Obj_Menu_Create_Team = controller.Obj_Menu_Create_Team
         self.Obj_Window_Association_Buzzer = controller.Obj_Window_Association_Buzzer
         self.Obj_Window_Detect_Winner = controller
-        tk.Label(self, text="PREMIER AU BUZZ ").pack()
-        tk.Label(self, text=controller.winner).pack()
+        tk.Label(self, text="PREMIER AU BUZZ: ", font=("Helvetica", 29,"bold"), fg = "white", bd = 0, bg = "black").pack()
+        tk.Label(self, text=controller.winner, font=("Helvetica", 76, "bold"), fg = "White", bd = 0, bg = "black").place(x = 180,y = 105)
         btn_continuer = Button(self, text="Continuer", command=lambda: self.Obj_Menu_Create_Team.switch_frame(
             self.Obj_Menu_Create_Team.container, "Window_Detect_Winner",
             controller=self.Obj_Window_Association_Buzzer))
-        btn_continuer.pack()
+        btn_continuer.place(x = 130, y = 450)
         btn_liste_equipe = Button(self, text="arrêter le jeu et revenir au menu principal",
                                   command=lambda: self.Obj_Menu_Create_Team.switch_frame(self.Obj_Menu_Create_Team
                                                                                          .container, "Menu_Create_Team",
                                                                             controller=self.Obj_Menu_Create_Team))
-        btn_liste_equipe.pack()
+        btn_liste_equipe.place(x = 130, y = 500)
 
 
 
