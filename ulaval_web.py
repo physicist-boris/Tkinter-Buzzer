@@ -11,7 +11,7 @@ elem.clear()
 elem.send_keys("elvisametolo@gmail.com")
 elem = driver.find_element_by_id("Password")
 elem.clear()
-elem.send_keys("Bouteille20", Keys.ENTER)
+elem.send_keys("*********", Keys.ENTER)
 time.sleep(5)
 
 driver.find_elements_by_class_name("square")[0].click()
